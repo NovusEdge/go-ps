@@ -10,18 +10,20 @@ $ go get github.com/NovusEdge/go-ps
 
 <br>
 
-#### Example use-cases:
+#### Example use-case:
 
-*] Importing the module:
+* Importing the module:
 
 ```go
 import gops "github.com/NovusEdge/go-ps"
 ```
 
+<br>
+<br>
 
 
-*] Declaring an a variable of type `PortScanner`:
-
+* Declaring an a variable of type `PortScanner`:
+ 
 ```go
 // Decalring a PortScanner object.
 
@@ -40,8 +42,10 @@ ps := gops.PortScanner{
 
 ```
 
+<br>
+<br>
 
-* `Scan()` iteartes over all ports in range [startPort, endPort] and reports which ports are open by printing to stdout.
+* `Scan()` iterates over all ports in range [startPort, endPort] and reports which ports are open by _printing to stdout_.
 
 
 ```go
@@ -51,6 +55,70 @@ ps := gops.PortScanner{
 	timeout   [time.Duration] timeout for each port being scanned.
 */
 ps.Scan(1, 1024, 500*time.Millisecond)
+```
+
+Output: 
+```
+[*] Port 80 open
+...
+...
+```
+
+<br>
+<br>
+
+* `Scans()` iterates over all ports in range [startPort, endPort] and _returns_ a list of open ports.
+
+
+```go
+/* Scans() parameters:
+	startPort [int] Port from which to start scanning (inclusive)
+	endPort   [int] Port on which to stop the scanning. (inclusive)
+	timeout   [time.Duration] timeout for each port being scanned.
+
+Returns: chan int
+*/
+
+ports := ps.Scans(1, 1024, 500*time.Millisecond)
+
+fmt.Println("Open Ports: ", ports)
+```
+
+Output:
+```
+Open Ports: [ 80 448 ... ]
+```
+
+***
+
+### Sample program:
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+
+    gops "github.com/NovusEdge/go-ps"
+)
+
+func main() {
+    ps := gops.PortScanner{
+	Domain: "scanme.nmap.org",
+	Protocol: "tcp",
+    }
+    
+    // Scan and report open ports in stdout:
+    ps.Scan(1, 1024, 500*time.Millisecond)
+
+    // Scan ports and get a list of open ports:
+    openPorts := ps.Scans()
+
+    // Use in whatever way you like :)
+    // For this sample, we'll just print it to stdout:
+
+    fmt.Println(openPorts)
+}
 ```
 
 
