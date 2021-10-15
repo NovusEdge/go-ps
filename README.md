@@ -76,7 +76,7 @@ Output:
 	endPort   [int] Port on which to stop the scanning. (inclusive)
 	timeout   [time.Duration] timeout for each port being scanned.
 
-Returns: chan int
+Returns: []int
 */
 
 ports := ps.Scans(1, 1024, 500*time.Millisecond)
@@ -112,7 +112,7 @@ func main() {
     ps.Scan(1, 1024, 500*time.Millisecond)
 
     // Scan ports and get a list of open ports:
-    openPorts := ps.Scans()
+    openPorts := ps.Scans(1, 1024, 500*time.Millisecond)
 
     // Use in whatever way you like :)
     // For this sample, we'll just print it to stdout:
