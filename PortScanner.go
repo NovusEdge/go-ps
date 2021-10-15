@@ -50,7 +50,6 @@ func (ps *PortScanner) Scan(startPort int, endPort int, timeout time.Duration) {
 */
 func (ps *PortScanner) Scans(startPort int, endPort int, timeout time.Duration) (res []int) {
 	var wg sync.WaitGroup
-	var OpenPorts chan int
 
 	for i := startPort; i <= endPort; i++ {
 		wg.Add(1)
@@ -62,15 +61,10 @@ func (ps *PortScanner) Scans(startPort int, endPort int, timeout time.Duration) 
 				return
 			}
 			conn.Close()
-			OpenPorts <- j
+			res = append(res, j)
 		}(i)
 	}
 	wg.Wait()
 
-	close(OpenPorts)
-
-	for i := 0; i < len(OpenPorts); i++ {
-		res = append(res, i)
-	}
 	return
 }
