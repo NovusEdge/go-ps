@@ -36,7 +36,7 @@ func (ps *PortScanner) Scan(startPort int, endPort int, timeout time.Duration) {
 				return
 			}
 			conn.Close()
-			fmt.Printf("\033[32m[+] Port %d is Open.\033[0m\n", j)
+			fmt.Printf("%s[+] Port %d is Open.%s\n", ColorGreen, j, ColorReset)
 		}(i)
 	}
 	wg.Wait()
